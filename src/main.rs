@@ -1,16 +1,25 @@
+mod videos;
+
 use yew::prelude::*;
 
+
+/// # Components
+/// Components are the building blocks of Yew applications. By combining components, which can be
+/// made of other components, we build our application. By structuring our components for re-usability
+/// and keeping them generic, we will be able to use them in multiple parts of our application without
+/// having to duplicate code or logic.
+/// There are two different types of components in Yew: function components and class/struct components.
 #[function_component(App)]
 fn app() -> Html {
+    let videos = videos::Video::videos().iter().map(|video| html! {
+        <p key={video.id}>{format!("{}: {}", video.speaker, video.title)}</p>
+    }).collect::<Html>();
     html! {
         <>
             <h1>{ "RustConf Explorer" }</h1>
             <div>
                 <h3>{"Videos to watch"}</h3>
-                <p>{ "Krishna Addepalli: Building and breaking things with Rust" }</p>
-                <p>{"Jane Smith: The development process "}</p>
-                <p>{"Matt Miller: The Web 7.0"}</p>
-                <p>{"Tom Jerry: Mouseless development"}</p>
+                {videos}
             </div>
             <div>
                 <h3>{"John Doe: Building and breaking things"}</h3>
