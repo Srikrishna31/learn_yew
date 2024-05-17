@@ -1,0 +1,5 @@
+[serve]
+# The address to serve on LAN.
+address = "127.0.0.1"
+# The port to serve on LAN.
+port=8000
