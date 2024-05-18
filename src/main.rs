@@ -1,6 +1,7 @@
 mod videos;
 
 use yew::prelude::*;
+use videos::{Video, VideosList};
 
 
 /// # Components
@@ -11,15 +12,12 @@ use yew::prelude::*;
 /// There are two different types of components in Yew: function components and class/struct components.
 #[function_component(App)]
 fn app() -> Html {
-    let videos = videos::Video::videos().iter().map(|video| html! {
-        <p key={video.id}>{format!("{}: {}", video.speaker, video.title)}</p>
-    }).collect::<Html>();
     html! {
         <>
             <h1>{ "RustConf Explorer" }</h1>
             <div>
                 <h3>{"Videos to watch"}</h3>
-                {videos}
+                <VideosList videos={Video::videos()} />
             </div>
             <div>
                 <h3>{"John Doe: Building and breaking things"}</h3>
