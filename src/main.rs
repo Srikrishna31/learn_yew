@@ -1,7 +1,7 @@
 mod videos;
 
 use yew::prelude::*;
-use videos::{Video, VideosList};
+use videos::{Video, VideosList, VideoDetails};
 
 
 /// # Components
@@ -12,17 +12,25 @@ use videos::{Video, VideosList};
 /// There are two different types of components in Yew: function components and class/struct components.
 #[function_component(App)]
 fn app() -> Html {
+    let selected_video = use_state(|| None);
+    let on_video_select = {
+        let selected_video = selected_video.clone();
+        Callback::from(move |video: Video| {
+            selected_video.set(Some(video));
+        })
+    };
+    let details = selected_video.as_ref().map(|video| html! {
+        <VideoDetails video={video.clone()} />
+    });
+
     html! {
         <>
             <h1>{ "RustConf Explorer" }</h1>
             <div>
                 <h3>{"Videos to watch"}</h3>
-                <VideosList videos={Video::videos()} />
+                <VideosList videos={Video::videos()} on_click={on_video_select.clone()} />
             </div>
-            <div>
-                <h3>{"John Doe: Building and breaking things"}</h3>
-                <img src="https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder" alt="video thumbnail" />
-            </div>
+            {for details}
         </>
     }
 }

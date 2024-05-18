@@ -42,11 +42,42 @@ impl Video {
 #[derive(Properties, PartialEq)]
 pub struct VideosListProps {
     pub videos: Vec<Video>,
+    pub on_click: Callback<Video>,
 }
 
+/// A function component takes only one argument which defines its "props"(short for "properties").
+/// Props are used to pass data down from a parent component to a child component. In this case,
+/// the `VideosListProps` struct that defines the props.
 #[function_component(VideosList)]
-pub fn videos_list(VideosListProps {videos}: &VideosListProps) -> Html {
-    videos.iter().map(|video| html! {
-        <p key={video.id}>{format!("{}: {}", video.speaker, video.title)}</p>
+pub fn videos_list(VideosListProps {videos, on_click}: &VideosListProps) -> Html {
+    let on_click = on_click.clone();
+
+    videos.iter().map(|video| {
+        let on_video_select = {
+            let on_click = on_click.clone();
+            let video = video.clone();
+            Callback::from(move |_| on_click.emit(video.clone()))
+        };
+
+        html!{
+            <p key={video.id} onclick={on_video_select}>
+                {format!("{}: {}", video.speaker, video.title)}</p>
+        }
     }).collect()
+}
+
+
+#[derive(Properties, PartialEq)]
+pub struct VideosDetailsProps {
+    pub video: Video,
+}
+
+#[function_component(VideoDetails)]
+pub fn videos_details(VideosDetailsProps {video}: &VideosDetailsProps) -> Html {
+    html! {
+        <div>
+            <h3>{video.title.clone()}</h3>
+            <img src="https://via.placeholder.com/640x360.png?text=Video+Player+Placeholder" alt="video thumbnail" />
+        </div>
+    }
 }
